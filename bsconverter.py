@@ -1,3 +1,6 @@
+"""
+BS Converter
+"""
 import datetime
 
 startBSYear = 1970
