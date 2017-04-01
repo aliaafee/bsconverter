@@ -278,6 +278,10 @@ newYearBS = [
 ]
 
 def bs2ad(year, month, day):
+    """
+    Convert BS date to AD date, valid date range 1970/1/1 to 2100/12/30.
+    Returns python datetime object.
+    """
     if year < startBSYear or year > (startBSYear + len(newYearBS) - 1) :
         raise Exception
 
@@ -305,6 +309,11 @@ def bs2ad(year, month, day):
 
 
 def ad2bs(date):
+    """
+    Convert AD date to BS date, valid date range 1913/4/13 to 2044/04/12.
+    Returns a tuple in the form (year, month, day)
+    """
+
     bsYear = 0
     currentnewYearDayAD = None
     for i, newYearDayAD in reversed(list(enumerate(newYearBS))):
@@ -348,15 +357,15 @@ def convert_file(filename):
             print "{0}".format(bs2ad(int(year), int(month), int(day)).strftime("%Y/%m/%d"))
 
 
-def license():
+def _license():
     print "BS to AD Converter"
     print "--------------------------------"
     print "Copyright (C) 2017 Ali Aafee"
     print ""
 
 
-def usage():
-    license()
+def _usage():
+    _license()
     print "Usage:"
     print "    -h, --help"
     print "       Displays this help"
@@ -367,22 +376,22 @@ def usage():
     print " "
             
     
-def main(argv):
+def _main(argv):
     try:
         opts, args = getopt.getopt(argv, "hi:", ["help", "input="])
     except getopt.GetoptError:
-        usage()
+        _usage()
         sys.exit(2)
     
     input_file = ''
     for opt, arg in opts:
         if opt in ("-h", "--help"):
-            usage()
+            _usage()
             sys.exit()
         elif opt in ("-i", "--input"):
             input_file = arg
     if input_file == '':
-        usage()
+        _usage()
         sys.exit()
 
     convert_file(input_file)
@@ -390,6 +399,5 @@ def main(argv):
 
 
 if __name__ == '__main__':
-    main(sys.argv[1:])
-#print bs2ad(2071, 7, 22)
-#print ad2bs(datetime.datetime(2014, 11, 8))
+    _main(sys.argv[1:])
+
