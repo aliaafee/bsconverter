@@ -1,7 +1,11 @@
 """
 BS Converter
 """
+import sys
+import getopt
+
 import datetime
+
 
 startBSYear = 1970
 
@@ -334,10 +338,58 @@ def ad2bs(date):
         raise Exception
 
     return (bsYear, bsMonth, bsDay)
+
+
+def convert_file(filename):
+    with open(filename) as f:
+        for line in f:
+            str_date_bs = line.strip()
+            year, month, day = tuple(str_date_bs.split("/"))
+            print "{0}".format(bs2ad(int(year), int(month), int(day)).strftime("%Y/%m/%d"))
+
+
+def license():
+    print "BS to AD Converter"
+    print "--------------------------------"
+    print "Copyright (C) 2017 Ali Aafee"
+    print ""
+
+
+def usage():
+    license()
+    print "Usage:"
+    print "    -h, --help"
+    print "       Displays this help"
+    print "    -i, --inputfile"
+    print "       Plain text file with each line containing"
+    print "       BS date in the format YYYY/MM/DD, valid"
+    print "       date range 1970/1/1 to 2100/12/30"
+    print " "
             
     
+def main(argv):
+    try:
+        opts, args = getopt.getopt(argv, "hi:", ["help", "input="])
+    except getopt.GetoptError:
+        usage()
+        sys.exit(2)
     
+    input_file = ''
+    for opt, arg in opts:
+        if opt in ("-h", "--help"):
+            usage()
+            sys.exit()
+        elif opt in ("-i", "--input"):
+            input_file = arg
+    if input_file == '':
+        usage()
+        sys.exit()
+
+    convert_file(input_file)
 
 
-print bs2ad(2071, 7, 22)
-print ad2bs(datetime.datetime(2014, 11, 8))
+
+if __name__ == '__main__':
+    main(sys.argv[1:])
+#print bs2ad(2071, 7, 22)
+#print ad2bs(datetime.datetime(2014, 11, 8))
