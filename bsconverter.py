@@ -294,8 +294,8 @@ def bs2ad(year, month, day):
     daysInCurrentBSMonths = daysInBSMonths[offset]
 
     if day < 1 or day > daysInCurrentBSMonths[month - 1]:
-        print daysInCurrentBSMonths
-        print daysInCurrentBSMonths[month - 1]
+        print(daysInCurrentBSMonths)
+        print(daysInCurrentBSMonths[month - 1])
         raise Exception
 
     dayDelta = 0
@@ -354,43 +354,81 @@ def convert_file(filename):
         for line in f:
             str_date_bs = line.strip()
             year, month, day = tuple(str_date_bs.split("/"))
-            print "{0}".format(bs2ad(int(year), int(month), int(day)).strftime("%Y/%m/%d"))
+            print("{0}".format(bs2ad(int(year), int(month), int(day)).strftime("%Y/%m/%d")))
+            
+            
+def convert_ad2bs(date_str):
+    date_array = date_str.split("/")
+    
+    if not(len(date_array) == 3):
+        print("{} invalid date formate")
+        return
+        
+    date_input = datetime.datetime(
+        int(date_array[0]),
+        int(date_array[1]),
+        int(date_array[2])
+    )
+    
+    date_bs = ad2bs(date_input)
+    
+    print("{:04d}/{:02d}/{:02d} AD => {:04d}/{:02d}/{:02d} BS".format(
+        date_input.year,
+        date_input.month,
+        date_input.day, 
+        date_bs[0],
+        date_bs[1],
+        date_bs[2]
+    ))
 
 
 def _license():
-    print "BS to AD Converter"
-    print "--------------------------------"
-    print "Copyright (C) 2017 Ali Aafee"
-    print ""
+    print("BS to AD Converter")
+    print("--------------------------------")
+    print("Copyright (C) 2017 Ali Aafee")
+    print("")
 
 
 def _usage():
     _license()
-    print "Usage:"
-    print "    -h, --help"
-    print "       Displays this help"
-    print "    -i, --inputfile"
-    print "       Plain text file with each line containing"
-    print "       BS date in the format YYYY/MM/DD, valid"
-    print "       date range 1970/1/1 to 2100/12/30"
-    print " "
+    print( "Usage:")
+    print( "    -h, --help")
+    print( "       Displays this help")
+    print( "    -d, --datead")
+    print( "       Date in Gregorian YYYY/MM/DD.")
+    #print( "    -b, --datebs") #TODO: Implement This
+    #print( "       Date in Bikram Sambath YYYY/MM/DD.")
+    print( "    -i, --inputfile")
+    print( "       Plain text file with each line containing")
+    print( "       BS date in the format YYYY/MM/DD, valid")
+    print( "       date range 1970/1/1 to 2100/12/30")
+    print( " ")
             
     
 def _main(argv):
     try:
-        opts, args = getopt.getopt(argv, "hi:", ["help", "input="])
+        opts, args = getopt.getopt(argv, "hd:b:i:", ["help", "datead=", "datebs=", "input="])
     except getopt.GetoptError:
         _usage()
         sys.exit(2)
     
-    input_file = ''
+    input_file = None
     for opt, arg in opts:
         if opt in ("-h", "--help"):
             _usage()
             sys.exit()
         elif opt in ("-i", "--input"):
             input_file = arg
-    if input_file == '':
+        elif opt in ("-d", "--datead"):
+            date_ad = arg
+        elif opt in ("-b", "--datebs"):
+            date_bs = arg
+            
+    if date_ad is not None:
+        convert_ad2bs(date_ad)
+        sys.exit()
+        
+    if input_file is None:
         _usage()
         sys.exit()
 
