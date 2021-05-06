@@ -381,6 +381,28 @@ def convert_ad2bs(date_str):
         date_bs[2]
     ))
 
+def convert_bs2ad(date_str):
+    date_array = date_str.split("/")
+    
+    if not(len(date_array) == 3):
+        print("{} invalid date formate")
+        return
+    
+    date_ad = bs2ad(
+        int(date_array[0]),
+        int(date_array[1]),
+        int(date_array[2])
+    )
+    
+    print("{:04d}/{:02d}/{:02d} BS => {:04d}/{:02d}/{:02d} AD".format(
+        int(date_array[0]),
+        int(date_array[1]),
+        int(date_array[2]), 
+        date_ad.year,
+        date_ad.month,
+        date_ad.day
+    ))
+
 
 def _license():
     print("BS to AD Converter")
@@ -412,7 +434,10 @@ def _main(argv):
         _usage()
         sys.exit(2)
     
+    date_ad = None
+    date_bs = None
     input_file = None
+    
     for opt, arg in opts:
         if opt in ("-h", "--help"):
             _usage()
@@ -426,6 +451,10 @@ def _main(argv):
             
     if date_ad is not None:
         convert_ad2bs(date_ad)
+        sys.exit()
+
+    if date_bs is not None:
+        convert_bs2ad(date_bs)
         sys.exit()
         
     if input_file is None:
