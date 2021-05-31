@@ -294,8 +294,8 @@ def bs2ad(year, month, day):
     daysInCurrentBSMonths = daysInBSMonths[offset]
 
     if day < 1 or day > daysInCurrentBSMonths[month - 1]:
-        print(daysInCurrentBSMonths)
-        print(daysInCurrentBSMonths[month - 1])
+        #print(daysInCurrentBSMonths)
+        #print(daysInCurrentBSMonths[month - 1])
         raise Exception
 
     dayDelta = 0
